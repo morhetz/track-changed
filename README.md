@@ -3,7 +3,10 @@ Track files changed by git
 
 Shamefully ripped off and based on Andrey Okonetchnikov's [lint-staged](https://github.com/okonet/lint-staged)
 
-Use [husky](https://github.com/typicode/husky) to manage git hooks
+Automagically fire tasks on branch change, merge and rebase if tracked files was changed.
+E.g. suitable for re-installing deps on changed lock-files.
+
+Use [husky](https://github.com/typicode/husky) to manage git hooks.
 
 ```
 "scripts": {
