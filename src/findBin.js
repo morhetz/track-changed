@@ -2,11 +2,10 @@ let npmWhich = require('npm-which')(process.cwd())
 let which = require('which')
 
 module.exports = function findBin(cmd, paths, packageJson, options) {
-  let defaultArgs = [ '--' ].concat(paths)
-    /*
-     * If package.json has script with cmd defined
-     * we want it to be executed first
-     */
+  /*
+    * If package.json has script with cmd defined
+    * we want it to be executed first
+    */
   if (packageJson.scripts && packageJson.scripts[cmd] !== undefined) {
     // Support for scripts from package.json
     return {
@@ -14,9 +13,8 @@ module.exports = function findBin(cmd, paths, packageJson, options) {
       args: [
         'run',
         options && options.verbose ? undefined : '--silent',
-        cmd
+        cmd.replace('$@', [ '--' ].concat(paths))
       ].filter(Boolean)
-      .concat(defaultArgs)
     }
   }
 
@@ -38,7 +36,7 @@ module.exports = function findBin(cmd, paths, packageJson, options) {
      *  }
      */
 
-  let parts = cmd.split(' ')
+  let parts = cmd.replace('$@', [ '' ].concat(paths)).split(' ')
   let bin = parts[0]
   let args = parts.splice(1)
 
@@ -54,8 +52,5 @@ module.exports = function findBin(cmd, paths, packageJson, options) {
     }
   }
 
-  return {
-    bin,
-    args: args.concat(defaultArgs)
-  }
+  return { bin, args }
 }
